@@ -18,6 +18,10 @@ jobs:
       with:
         dotnet-version: 5.0.x
         
+    - name: Setup vars
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
     - name: Restore dependencies
       run: dotnet restore
       
@@ -27,9 +31,17 @@ jobs:
     - name: Test
       run: dotnet test --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput='./coverage/lcov.info' /p:Threshold=75
       
-    - name: Coveralls GitHub Action
+    - name: Coverage
       # uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
       uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./WerkWerk.Test/coverage/lcov.info
+    
+    - name: Pack
+      run: dotnet pack --no-build --version-suffix ${{ setps.vars.outputs.sha_short }}
+      
+    - name: Push
+      run: dotnet nuget push ./WerkWerk/bin/Debug/*.nupkg -k ${API_KEY} -s https://api.nuget.org/v3/index.json
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
