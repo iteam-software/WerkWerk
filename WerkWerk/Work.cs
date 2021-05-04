@@ -28,7 +28,8 @@ namespace WerkWerk
                 }
                 catch (Exception ex)
                 {
-                    context.Logger.LogError(ex, result.Error);
+                    result = WorkResult.Fail(ex.Message);
+                    context.Logger.LogError(ex, "Work task failed.");
                     break;
                 }
             }

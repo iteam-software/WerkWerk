@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace WerkWerk
 {
+    using System.Diagnostics;
     using Data;
 
     public abstract class Worker<T> : BackgroundService
@@ -37,13 +38,16 @@ namespace WerkWerk
             while (!stoppingToken.IsCancellationRequested)
             {
                 using var scope = _provider.CreateScope();
+                var watch = new Stopwatch();
                 var provider = scope.ServiceProvider;
                 var repo = provider.GetRequiredService<IWorkRepository>();
                 var job = await repo.GetNextJob(work.JobName, work.MaxRetries, stoppingToken);
 
                 if (job)
                 {
+                    watch.Start();
                     var cleanup = stoppingToken.Register(repo => (repo as IWorkRepository)?.CancelJobSync(job), repo);
+
                     using (logger.BeginScope(job))
                     {
                         try
@@ -67,10 +71,12 @@ namespace WerkWerk
                             await repo.FailJob(job, stoppingToken);
                         }
                     }
+
                     cleanup.Unregister();
+                    watch.Stop();
                 }
 
-                await Task.Delay(work.Interval);
+                await Task.Delay(Math.Max(0, work.Interval.Milliseconds - watch.Elapsed.Milliseconds));
             }
         }
     }

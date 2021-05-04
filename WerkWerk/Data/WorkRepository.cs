@@ -31,7 +31,7 @@ namespace WerkWerk.Data
             job.Status = JobState.Cancelled;
             job.CancelledAt = DateTime.UtcNow;
 
-            _context.Attach(job);
+            _context.Update(job);
             _context.SaveChanges();
         }
 
@@ -40,6 +40,7 @@ namespace WerkWerk.Data
             job.CompletedAt = DateTime.UtcNow;
             job.Status = JobState.Complete;
 
+            _context.Update(job);
             await _context.SaveChangesAsync(token);
         }
 
@@ -48,6 +49,7 @@ namespace WerkWerk.Data
             job.RetryCount++;
             job.Status = JobState.Failed;
 
+            _context.Update(job);
             await _context.SaveChangesAsync(token);
         }
 
@@ -91,7 +93,6 @@ namespace WerkWerk.Data
         {
             job.Status = JobState.InProgress;
             _context.Update(job);
-
             await _context.SaveChangesAsync(token);
         }
     }

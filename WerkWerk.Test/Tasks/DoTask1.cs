@@ -7,6 +7,11 @@ namespace WerkWerk.Test.Tasks
     {
         public async Task<WorkResult> Execute(WorkContext<TestWorkerData> context)
         {
+            if (context.Data.ForceFail)
+            {
+                return WorkResult.Fail(string.Empty);
+            }
+
             await Task.Delay(50);
             context.Data.Task1Complete = true;
             return WorkResult.Success();
