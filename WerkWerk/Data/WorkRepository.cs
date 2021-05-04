@@ -56,7 +56,7 @@ namespace WerkWerk.Data
         public async Task<Job> GetNextJob(string name, int maxRetries, CancellationToken token = default)
         {
             var job = await _context.Set<Job>()
-                .Where(job => job.Status == JobState.Failed && job.RetryCount < maxRetries)
+                .Where(job => job.Name == name && job.Status == JobState.Failed && job.RetryCount < maxRetries)
                 .OrderBy(job => job.CreatedAt)
                 .FirstOrDefaultAsync(token);
 
@@ -67,7 +67,7 @@ namespace WerkWerk.Data
 
             // Look for non-failed work to do
             return await _context.Set<Job>()
-                .Where(job => job.Status == JobState.Pending)
+                .Where(job => job.Name == name && job.Status == JobState.Pending)
                 .OrderBy(job => job.CreatedAt)
                 .FirstOrDefaultAsync();
         }

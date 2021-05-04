@@ -14,5 +14,15 @@ namespace WerkWerk
 
             return services;
         }
+
+        public static IServiceCollection AddWerk<TContext, TRepository>(this IServiceCollection services)
+            where TContext : DbContext
+            where TRepository : class, IWorkRepository
+        {
+            services.AddScoped<IWorkRepository, TRepository>();
+            services.AddLogging();
+
+            return services;
+        }
     }
 }

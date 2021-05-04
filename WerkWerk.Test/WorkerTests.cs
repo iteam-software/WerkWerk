@@ -83,6 +83,69 @@ namespace WerkWerk.Test
             Assert.Equal(3, job.RetryCount);
         }
 
+        [Fact]
+        public async void ExecuteTestWorker_InvalidWorker()
+        {
+            //Given
+            var provider = BuildServiceProvider(nameof(ExecuteTestWorker_InvalidWorker));
+            using var worker = new InvalidWorker(provider);
+            var context = provider.GetRequiredService<TestContext>();
+            var repo = provider.GetRequiredService<IWorkRepository>();
+            var source = new CancellationTokenSource();
+
+            await repo.New<TestWorkerData>("InvalidWork", "xunit", new TestWorkerData { ForceFail = true });
+
+            //When
+            await worker.StartAsync(source.Token);
+
+            var job = await context.Jobs.AsNoTracking().FirstOrDefaultAsync();
+            Assert.Equal(JobState.Pending, job.Status);
+        }
+
+        [Fact]
+        public async void ExecuteTestWorker_InvalidServiceProvider()
+        {
+            var provider = new ServiceCollection()
+                .AddWerk<TestContext>()
+                .AddDbContext<TestContext>(options => options.UseInMemoryDatabase(nameof(ExecuteTestWorker_InvalidServiceProvider)))
+                .BuildServiceProvider();
+
+            using var worker = new TestWorker(provider, TimeSpan.FromMilliseconds(50));
+            var context = provider.GetRequiredService<TestContext>();
+            var repo = provider.GetRequiredService<IWorkRepository>();
+            var source = new CancellationTokenSource();
+
+            await repo.New<TestWorkerData>("TestWork", "xunit", new TestWorkerData { ForceFail = true });
+
+            //When
+            worker.StartAsync(source.Token).Fire();
+
+            // Wait for the worker to clear the work queue
+            await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith(_ => source.Cancel());
+
+            var job = await context.Jobs.AsNoTracking().FirstOrDefaultAsync();
+            Assert.Equal(JobState.Failed, job.Status);
+            Assert.Equal(3, job.RetryCount);
+        }
+
+        [Fact]
+        public async void ExecuteTestWorker_CustomRepository_FAIL()
+        {
+            var provider = new ServiceCollection()
+                .AddWerk<TestContext, CustomRepository>()
+                .AddDbContext<TestContext>(options => options.UseInMemoryDatabase(nameof(ExecuteTestWorker_CustomRepository_FAIL)))
+                .BuildServiceProvider();
+
+            using var worker = new TestWorker(provider, TimeSpan.FromMilliseconds(50));
+            var source = new CancellationTokenSource();
+
+            //When
+            worker.StartAsync(source.Token).Fire();
+
+            // Wait for the worker to clear the work queue
+            await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith(_ => source.Cancel());
+        }
+
         private IServiceProvider BuildServiceProvider(string databaseName)
         {
             var services = new ServiceCollection();
