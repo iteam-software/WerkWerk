@@ -9,7 +9,7 @@ namespace WerkWerk
 {
     using Data;
 
-    public abstract class Worker : BackgroundService
+    public abstract class Worker<T> : BackgroundService
     {
         private readonly IServiceProvider _provider;
 
@@ -18,14 +18,14 @@ namespace WerkWerk
             _provider = provider;
         }
 
-        protected abstract WorkBuilder Configure(WorkBuilder builder);
+        protected abstract WorkBuilder<T> Configure(WorkBuilder<T> builder);
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var workerName = GetType().Name;
             var factory = _provider.GetService<ILoggerFactory>();
             var logger = factory.CreateLogger(workerName);
-            var builder = Configure(new WorkBuilder());
+            var builder = Configure(new WorkBuilder<T>());
 
             var work = builder.Build();
             if (!work)
@@ -49,7 +49,7 @@ namespace WerkWerk
                         try
                         {
                             await repo.StartJob(job, stoppingToken);
-                            var result = await work.Do(WorkContext.FromJob(job, logger, provider));
+                            var result = await work.Do(WorkContext<T>.FromJob(job, logger, provider));
 
                             if (result.Succeeded)
                             {

@@ -22,7 +22,7 @@ namespace WerkWerk.Data
         public int RetryCount { get; set; }
         public string RequestedBy { get; set; }
         public JobState Status { get; set; }
-        public object Data { get; set; }
+        public string Data { get; set; }
 
         public static implicit operator bool(Job job)
         {

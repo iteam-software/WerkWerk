@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace WerkWerk.Data
@@ -9,7 +10,7 @@ namespace WerkWerk.Data
     public interface IWorkRepository
     {
         Task<Job> GetNextJob(string name, int maxRetries, CancellationToken token = default);
-        Task<Job> New(string name, string requestedBy, object data, CancellationToken token = default);
+        Task<Job> New<T>(string name, string requestedBy, T data, CancellationToken token = default);
         Task StartJob(Job job, CancellationToken token = default);
         Task FailJob(Job job, CancellationToken token = default);
         Task Completejob(Job job, CancellationToken token = default);
@@ -69,7 +70,7 @@ namespace WerkWerk.Data
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Job> New(string name, string requestedBy, object data, CancellationToken token = default)
+        public async Task<Job> New<T>(string name, string requestedBy, T data, CancellationToken token = default)
         {
             var job = new Job
             {
@@ -77,7 +78,7 @@ namespace WerkWerk.Data
                 RequestedBy = requestedBy,
                 CreatedAt = DateTime.UtcNow,
                 Status = JobState.Pending,
-                Data = data
+                Data = JsonSerializer.Serialize<T>(data)
             };
 
             _context.Add(job);

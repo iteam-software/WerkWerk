@@ -4,15 +4,15 @@ using Microsoft.Extensions.Logging;
 
 namespace WerkWerk
 {
-    public class Work
+    public class Work<T>
     {
-        private WorkPipeline _pipeline = new WorkPipeline();
+        private WorkPipeline<T> _pipeline = new WorkPipeline<T>();
 
         public string JobName { get; set; }
         public TimeSpan Interval { get; set; }
         public int MaxRetries { get; set; }
 
-        public async Task<WorkResult> Do(WorkContext context)
+        public async Task<WorkResult> Do(WorkContext<T> context)
         {
             WorkResult result = null;
             foreach (var factory in _pipeline)
@@ -36,12 +36,12 @@ namespace WerkWerk
             return result;
         }
 
-        public static implicit operator bool(Work work)
+        public static implicit operator bool(Work<T> work)
         {
             return !string.IsNullOrEmpty(work?.JobName);
         }
 
-        internal Work(WorkPipeline pipeline)
+        internal Work(WorkPipeline<T> pipeline)
         {
             _pipeline = pipeline;
         }
