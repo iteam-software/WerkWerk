@@ -9,6 +9,7 @@ namespace WerkWerk.Test
     using Workers;
     using Data;
     using Model;
+    using Tasks;
     using Microsoft.EntityFrameworkCore;
 
     public sealed class WorkerTests : IDisposable
@@ -20,6 +21,8 @@ namespace WerkWerk.Test
             var services = new ServiceCollection();
             services.AddWerk<TestContext>();
             services.AddDbContext<TestContext>(options => options.UseInMemoryDatabase("TestData"));
+            services.AddScoped<DoTask1>();
+            services.AddScoped<DoTask2>();
 
             _provider = services.BuildServiceProvider();
         }
