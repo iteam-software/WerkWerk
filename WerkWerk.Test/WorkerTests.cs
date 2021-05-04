@@ -115,7 +115,7 @@ namespace WerkWerk.Test
             var repo = provider.GetRequiredService<IWorkRepository>();
             var source = new CancellationTokenSource();
 
-            await repo.New<TestWorkerData>("TestWork", "xunit", new TestWorkerData { ForceFail = true });
+            var job = await repo.New<TestWorkerData>("TestWork", "xunit", new TestWorkerData { ForceFail = true });
 
             //When
             worker.StartAsync(source.Token).Fire();
@@ -123,7 +123,7 @@ namespace WerkWerk.Test
             // Wait for the worker to clear the work queue
             await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith(_ => source.Cancel());
 
-            var job = await context.Jobs.AsNoTracking().FirstOrDefaultAsync();
+            job = await context.Jobs.AsNoTracking().FirstOrDefaultAsync();
             Assert.Equal(JobState.Failed, job.Status);
             Assert.Equal(3, job.RetryCount);
         }

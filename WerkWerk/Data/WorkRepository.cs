@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace WerkWerk.Data
@@ -14,6 +14,7 @@ namespace WerkWerk.Data
         Task StartJob(Job job, CancellationToken token = default);
         Task FailJob(Job job, CancellationToken token = default);
         Task Completejob(Job job, CancellationToken token = default);
+        IQueryable<Job> GetMatchedJobs(string name, string checksum);
         void CancelJobSync(Job job);
     }
 
@@ -53,6 +54,11 @@ namespace WerkWerk.Data
             await _context.SaveChangesAsync(token);
         }
 
+        public IQueryable<Job> GetMatchedJobs(string name, string checksum)
+        {
+            return _context.Set<Job>().Where(job => job.Name == name && job.Checksum == checksum);
+        }
+
         public async Task<Job> GetNextJob(string name, int maxRetries, CancellationToken token = default)
         {
             var job = await _context.Set<Job>()
@@ -74,13 +80,15 @@ namespace WerkWerk.Data
 
         public async Task<Job> New<T>(string name, string requestedBy, T data, CancellationToken token = default)
         {
+            var str = Job.GetData(data);
             var job = new Job
             {
                 Name = name,
                 RequestedBy = requestedBy,
                 CreatedAt = DateTime.UtcNow,
                 Status = JobState.Pending,
-                Data = JsonSerializer.Serialize<T>(data)
+                Data = str,
+                Checksum = Job.GetChecksum(str),
             };
 
             _context.Add(job);

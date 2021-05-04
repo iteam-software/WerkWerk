@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace WerkWerk.Test.Model
 {
+    using System.Linq;
     using Data;
 
     public class CustomRepository : IWorkRepository
@@ -30,6 +31,11 @@ namespace WerkWerk.Test.Model
             _job.RetryCount++;
 
             return Task.CompletedTask;
+        }
+
+        public IQueryable<Job> GetMatchedJobs(string name, string checksum)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<Job> GetNextJob(string name, int maxRetries, CancellationToken token = default)

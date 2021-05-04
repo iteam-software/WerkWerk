@@ -11,7 +11,7 @@ namespace WerkWerk.Test.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Job>().HasKey(j => j.Id);
+            modelBuilder.Entity<Job>(Job.DefaultEntitySetup);
         }
     }
 }
