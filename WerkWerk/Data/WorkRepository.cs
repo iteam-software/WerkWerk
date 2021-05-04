@@ -17,11 +17,11 @@ namespace WerkWerk.Data
         void CancelJobSync(Job job);
     }
 
-    public class WorkRepository : IWorkRepository
+    public class WorkRepository<TContext> : IWorkRepository where TContext : DbContext
     {
-        private readonly DbContext _context;
+        private readonly TContext _context;
 
-        public WorkRepository(DbContext context)
+        public WorkRepository(TContext context)
         {
             _context = context;
         }
