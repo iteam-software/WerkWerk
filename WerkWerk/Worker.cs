@@ -45,6 +45,8 @@ namespace WerkWerk
 
                 if (job)
                 {
+                    logger.LogInformation($"Job found: {job.Name}");
+
                     watch.Start();
                     var cleanup = stoppingToken.Register(repo => (repo as IWorkRepository)?.CancelJobSync(job), repo);
 
@@ -76,7 +78,9 @@ namespace WerkWerk
                     watch.Stop();
                 }
 
-                await Task.Delay(Math.Max(0, work.Interval.Milliseconds - watch.Elapsed.Milliseconds));
+                await Task.Delay(Convert.ToInt32(
+                    Math.Max(0.0, work.Interval.TotalMilliseconds - watch.Elapsed.TotalMilliseconds)
+                ));
             }
         }
     }

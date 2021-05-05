@@ -20,6 +20,9 @@ namespace WerkWerk
                 try
                 {
                     var middleware = factory(context.Services);
+
+                    context.Logger.LogInformation($"Executing job middleware: {middleware.GetType().Name}");
+
                     result = await middleware.Execute(context);
                     if (!result.Succeeded)
                     {

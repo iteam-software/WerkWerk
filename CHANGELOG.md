@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changed prerelease suffix from `alpha` to `unstable`
+- Changed timeleft calculation to use total milliseconds
 
 ## [1.0.1]
 
