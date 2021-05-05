@@ -85,8 +85,6 @@ namespace WerkWerk.Data
             {
                 Name = name,
                 RequestedBy = requestedBy,
-                CreatedAt = DateTime.UtcNow,
-                Status = JobState.Pending,
                 Data = str,
                 Checksum = Job.GetChecksum(str),
             };

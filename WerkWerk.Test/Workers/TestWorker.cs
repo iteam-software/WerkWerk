@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace WerkWerk.Test.Workers
 {
@@ -17,6 +18,11 @@ namespace WerkWerk.Test.Workers
         protected override WorkBuilder<TestWorkerData> Configure(WorkBuilder<TestWorkerData> builder) => builder
             .Setup("TestWork", _interval)
             .Use<DoTask1>()
-            .Use<DoTask2>();
+            .Use(async ctx =>
+            {
+                await Task.Delay(50);
+                ctx.Data.Task2Complete = true;
+                return WorkResult.Success();
+            });
     }
 }

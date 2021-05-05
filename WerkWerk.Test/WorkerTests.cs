@@ -116,6 +116,7 @@ namespace WerkWerk.Test
             var source = new CancellationTokenSource();
 
             var job = await repo.New<TestWorkerData>("TestWork", "xunit", new TestWorkerData { ForceFail = true });
+            var id = job.Id;
 
             //When
             worker.StartAsync(source.Token).Fire();
@@ -126,6 +127,7 @@ namespace WerkWerk.Test
             job = await context.Jobs.AsNoTracking().FirstOrDefaultAsync();
             Assert.Equal(JobState.Failed, job.Status);
             Assert.Equal(3, job.RetryCount);
+            Assert.Equal(id, job.Id);
         }
 
         [Fact]

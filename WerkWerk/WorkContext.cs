@@ -1,9 +1,10 @@
 using System;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace WerkWerk
 {
-    using System.Text.Json;
     using Data;
 
     public class WorkContext<T>
@@ -14,6 +15,7 @@ namespace WerkWerk
         public string RequestedBy { get; private set; }
         public T Data { get; private set; }
         public ILogger Logger => _logger;
+        public Dictionary<string, object> Items = new Dictionary<string, object>();
 
         public IServiceProvider Services => _services;
 
