@@ -53,7 +53,7 @@ namespace WerkWerk
                         try
                         {
                             await repo.StartJob(job, stoppingToken);
-                            var result = await work.Do(WorkContext<T>.FromJob(job, logger, provider));
+                            var result = await work.Do(WorkContext<T>.FromJob(job, logger, provider, stoppingToken));
 
                             if (result.Succeeded)
                             {

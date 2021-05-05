@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unstable]
 
+### Added
+
+- Cancellation token for job to the WorkContext
+
 ### Changed
 
 - Changed prerelease suffix from `alpha` to `unstable`
