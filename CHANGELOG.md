@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unstable]
 
+## [1.0.1]
+
 ### Changed
 
 - WorkContext.Items is now a property.
@@ -26,5 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD for the project
 - Initial codebase
 
-[unstable]: https://github.com/iteam-consulting/WerkWerk/compare/1.0.0...HEAD
+[unstable]: https://github.com/iteam-consulting/WerkWerk/compare/1.0.1...HEAD
+[1.0.1]: https://github.com/iteam-consulting/WerkWerk/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/iteam-consulting/WerkWerk/releases/tag/1.0.0
