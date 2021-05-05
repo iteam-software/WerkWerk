@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unstable]
 
+### Changed
+
+- WorkContext.Items is now a property.
+
 ### Added
 
 - Job model default values.

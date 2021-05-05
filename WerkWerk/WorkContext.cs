@@ -11,11 +11,12 @@ namespace WerkWerk
     {
         private ILogger _logger;
         private IServiceProvider _services;
+        private Dictionary<string, object> _items = new Dictionary<string, object>();
 
         public string RequestedBy { get; private set; }
         public T Data { get; private set; }
         public ILogger Logger => _logger;
-        public Dictionary<string, object> Items = new Dictionary<string, object>();
+        public IDictionary<string, object> Items => _items;
 
         public IServiceProvider Services => _services;
 
