@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>WerkWerk</PackageId>
     <Version Condition=" '$(VersionSuffix)' == '' ">1.0.1</Version>
-    <Version Condition=" '$(VersionSuffix)' != '' ">1.0.1-alpha.$(VersionSuffix)</Version>
+    <Version Condition=" '$(VersionSuffix)' != '' ">1.0.1-unstable.$(VersionSuffix)</Version>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Authors>Matt Lynam</Authors>
     <Company>iTEAM Consulting, LLC</Company>
