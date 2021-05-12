@@ -11,7 +11,16 @@ namespace WerkWerk.Test.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Job>(Job.DefaultEntitySetup);
+            modelBuilder.Entity<Job>(e =>
+            {
+                Job.DefaultEntitySetup(e);
+
+                e.Property(e => e.Data)
+                    .HasConversion<string>(
+                        data => Job.DataToJson(data),
+                        json => Job.JsonToData(json)
+                    );
+            });
         }
     }
 }

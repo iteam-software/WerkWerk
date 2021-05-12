@@ -15,6 +15,10 @@ namespace WerkWerk.Test
             var checksum = Job.GetChecksum<dynamic>(data);
 
             Assert.False(string.IsNullOrEmpty(checksum));
+            Assert.Equal(
+                Job.GetChecksum<dynamic>(new { foo = "bar" }),
+                checksum
+            );
         }
 
         [Fact]

@@ -17,7 +17,7 @@ namespace WerkWerk.Data
         Complete
     }
 
-    public class Job
+    public class Job : IDisposable
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -28,7 +28,7 @@ namespace WerkWerk.Data
         public DateTime? CancelledAt { get; set; }
         public int RetryCount { get; set; }
         public string RequestedBy { get; set; }
-        public string Data { get; set; }
+        public JsonDocument Data { get; set; }
         public string Checksum { get; set; }
 
         public static implicit operator bool(Job job)
@@ -36,32 +36,57 @@ namespace WerkWerk.Data
             return job != null;
         }
 
-        public static string GetData<T>(T data)
+        public static JsonDocument GetData<T>(T data)
         {
-            return JsonSerializer.Serialize(data);
+            return JsonDocument.Parse(
+                JsonSerializer.Serialize(data)
+            );
         }
 
         public static string GetChecksum<T>(T data)
         {
-            var str = GetData(data);
-            return GetChecksum(str);
+            var doc = GetData(data);
+            return GetChecksum(doc);
         }
 
-        public static string GetChecksum(string str)
+        public static string GetChecksum(JsonDocument doc)
         {
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(str)))
+            using var writeStream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(writeStream);
+
+            doc.WriteTo(writer);
+            writer.Flush();
+
+            using var stream = new MemoryStream(writeStream.ToArray());
+
+            var sha = new SHA256Managed();
+            var bytes = sha.ComputeHash(stream);
+            var checksum = new StringBuilder(bytes.Length * 2);
+
+            foreach (var b in bytes)
             {
-                var sha = new SHA256Managed();
-                var bytes = sha.ComputeHash(stream);
-                var checksum = new StringBuilder(bytes.Length * 2);
-
-                foreach (var b in bytes)
-                {
-                    checksum.Append(b.ToString("x2"));
-                }
-
-                return checksum.ToString();
+                checksum.Append(b.ToString("x2"));
             }
+
+            return checksum.ToString();
+        }
+
+        public static string DataToJson(JsonDocument data)
+        {
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream);
+
+            data.WriteTo(writer);
+            writer.Flush();
+
+            return Encoding.UTF8.GetString(stream.ToArray());
+        }
+
+        public string DataToJson() => DataToJson(Data);
+
+        public static JsonDocument JsonToData(string json)
+        {
+            return JsonDocument.Parse(json);
         }
 
         public static void DefaultEntitySetup(EntityTypeBuilder<Job> builder)
@@ -70,5 +95,7 @@ namespace WerkWerk.Data
             builder.HasIndex(e => new { e.Name, e.Checksum });
             builder.HasIndex(e => e.Checksum);
         }
+
+        public void Dispose() => Data?.Dispose();
     }
 }

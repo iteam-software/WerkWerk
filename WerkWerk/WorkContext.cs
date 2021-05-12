@@ -6,6 +6,8 @@ using System.Text.Json;
 
 namespace WerkWerk
 {
+    using System.IO;
+    using System.Text;
     using Data;
 
     public class WorkContext<T>
@@ -24,13 +26,15 @@ namespace WerkWerk
 
         internal static WorkContext<T> FromJob(Job job, ILogger logger, IServiceProvider services, CancellationToken token = default)
         {
+            var json = job.DataToJson();
+
             return new WorkContext<T>
             {
                 _logger = logger,
                 _services = services,
                 _jobCancel = token,
                 RequestedBy = job.RequestedBy,
-                Data = JsonSerializer.Deserialize<T>(job.Data),
+                Data = JsonSerializer.Deserialize<T>(json),
             };
         }
     }
