@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -97,6 +96,7 @@ namespace WerkWerk.Data
 
         public async Task StartJob(Job job, CancellationToken token = default)
         {
+            job.StartedAt = DateTime.UtcNow;
             job.Status = JobState.InProgress;
             _context.Update(job);
             await _context.SaveChangesAsync(token);

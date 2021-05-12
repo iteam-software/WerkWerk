@@ -23,6 +23,7 @@ namespace WerkWerk.Data
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public JobState Status { get; set; }
         public string Name { get; set; }
+        public DateTime? StartedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
         public DateTime? CancelledAt { get; set; }
         public int RetryCount { get; set; }

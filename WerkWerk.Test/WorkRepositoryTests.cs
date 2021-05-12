@@ -26,6 +26,21 @@ namespace WerkWerk.Test
         }
 
         [Fact]
+        public async void StartJob()
+        {
+            var provider = BuildServiceProvider(nameof(StartJob));
+            var repo = provider.GetRequiredService<IWorkRepository>();
+            using var context = provider.GetRequiredService<TestContext>();
+            var job = await repo.New<TestWorkerData>("Test", "Han Solo", new TestWorkerData());
+
+            await repo.StartJob(job);
+
+            var entity = await context.Jobs.AsNoTracking().FirstOrDefaultAsync();
+            Assert.NotNull(entity.StartedAt);
+            Assert.Equal(JobState.InProgress, entity.Status);
+        }
+
+        [Fact]
         public async void GetMatchedJobs()
         {
             var provider = BuildServiceProvider(nameof(CancelJob));

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added StartedAt to Job
 - Cancellation token for job to the WorkContext
 
 ### Changed
