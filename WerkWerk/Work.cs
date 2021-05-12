@@ -45,7 +45,7 @@ namespace WerkWerk
             return !string.IsNullOrEmpty(work?.JobName);
         }
 
-        internal Work(WorkPipeline<T> pipeline)
+        public Work(WorkPipeline<T> pipeline)
         {
             _pipeline = pipeline;
         }
