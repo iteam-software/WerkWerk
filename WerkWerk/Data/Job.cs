@@ -1,6 +1,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -59,7 +60,7 @@ namespace WerkWerk.Data
 
             using var stream = new MemoryStream(writeStream.ToArray());
 
-            var sha = new SHA256Managed();
+            var sha = SHA256.Create();
             var bytes = sha.ComputeHash(stream);
             var checksum = new StringBuilder(bytes.Length * 2);
 

@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <PackageId>WerkWerk</PackageId>
-    <Version Condition=" '$(VersionSuffix)' == '' ">1.0.1</Version>
-    <Version Condition=" '$(VersionSuffix)' != '' ">1.0.1-unstable.$(VersionSuffix)</Version>
+    <Version Condition=" '$(VersionSuffix)' == '' ">9.0.0</Version>
+    <Version Condition=" '$(VersionSuffix)' != '' ">9.0.0-unstable.$(VersionSuffix)</Version>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Authors>Matt Lynam</Authors>
     <Company>iTEAM Consulting, LLC</Company>
@@ -12,10 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
   </ItemGroup>
 
 </Project>
