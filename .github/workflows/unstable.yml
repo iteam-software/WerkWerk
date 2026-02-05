@@ -40,6 +40,6 @@ jobs:
         run: dotnet pack --no-build -c Debug --version-suffix ${{ steps.vars.outputs.sha_short }}
 
       - name: Push
-        run: dotnet nuget push ./WerkWerk/bin/Debug/*.nupkg -k ${API_KEY} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./WerkWerk/bin/Debug/*.nupkg -k ${API_KEY} -s https://nuget.pkg.github.com/iteam-software/index.json
         env:
           API_KEY: ${{ secrets.API_KEY }}
