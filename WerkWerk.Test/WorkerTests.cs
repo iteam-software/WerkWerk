@@ -16,7 +16,7 @@ namespace WerkWerk.Test
     {
 
         [Fact]
-        public async void ExecuteTestWorker()
+        public async Task ExecuteTestWorker()
         {
             //Given
             var provider = BuildServiceProvider(nameof(ExecuteTestWorker));
@@ -39,7 +39,7 @@ namespace WerkWerk.Test
         }
 
         [Fact]
-        public async void ExecuteTestWorker_FAIL()
+        public async Task ExecuteTestWorker_FAIL()
         {
             //Given
             var provider = BuildServiceProvider(nameof(ExecuteTestWorker_FAIL));
@@ -61,7 +61,7 @@ namespace WerkWerk.Test
         }
 
         [Fact]
-        public async void ExecuteTestWorker_TaskThrows()
+        public async Task ExecuteTestWorker_TaskThrows()
         {
             //Given
             var provider = BuildServiceProvider(nameof(ExecuteTestWorker_TaskThrows));
@@ -84,7 +84,7 @@ namespace WerkWerk.Test
         }
 
         [Fact]
-        public async void ExecuteTestWorker_InvalidWorker()
+        public async Task ExecuteTestWorker_InvalidWorker()
         {
             //Given
             var provider = BuildServiceProvider(nameof(ExecuteTestWorker_InvalidWorker));
@@ -103,7 +103,7 @@ namespace WerkWerk.Test
         }
 
         [Fact]
-        public async void ExecuteTestWorker_InvalidServiceProvider()
+        public async Task ExecuteTestWorker_InvalidServiceProvider()
         {
             var provider = new ServiceCollection()
                 .AddWerk<TestContext>()
@@ -131,7 +131,7 @@ namespace WerkWerk.Test
         }
 
         [Fact]
-        public async void ExecuteTestWorker_CustomRepository_FAIL()
+        public async Task ExecuteTestWorker_CustomRepository_FAIL()
         {
             var provider = new ServiceCollection()
                 .AddWerk<TestContext, CustomRepository>()

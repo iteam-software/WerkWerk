@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -11,7 +12,7 @@ namespace WerkWerk.Test
     public class WorkRepositoryTests
     {
         [Fact]
-        public async void CancelJob()
+        public async Task CancelJob()
         {
             var provider = BuildServiceProvider(nameof(CancelJob));
             var repo = provider.GetRequiredService<IWorkRepository>();
@@ -26,7 +27,7 @@ namespace WerkWerk.Test
         }
 
         [Fact]
-        public async void StartJob()
+        public async Task StartJob()
         {
             var provider = BuildServiceProvider(nameof(StartJob));
             var repo = provider.GetRequiredService<IWorkRepository>();
@@ -41,7 +42,7 @@ namespace WerkWerk.Test
         }
 
         [Fact]
-        public async void GetMatchedJobs()
+        public async Task GetMatchedJobs()
         {
             var provider = BuildServiceProvider(nameof(CancelJob));
             var repo = provider.GetRequiredService<IWorkRepository>();
