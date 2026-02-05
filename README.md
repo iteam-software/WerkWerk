@@ -1,5 +1,5 @@
 # WerkWerk
-[![Coverage Status](https://coveralls.io/repos/github/iteam-consulting/WerkWerk/badge.svg?branch=main)](https://coveralls.io/github/iteam-consulting/WerkWerk?branch=main)
 
+[![Coverage Status](https://coveralls.io/repos/github/iteam-software/WerkWerk/badge.svg)](https://coveralls.io/github/iteam-software/WerkWerk)
 
 Lightweight background worker tooling for .Net Core.
